@@ -33,12 +33,24 @@
 - `root.lua`: 项目根目录检测
 - `fs.lua`: 文件系统操作
 
-### Rust 工具链配置 (nix/rust.nix)
+### Nix 配置层 (nix/)
+
+使用 home-manager 模块系统实现配置模块化：
+
+#### Rust 工具链配置 (nix/rust.nix)
 - 完整的 home-manager 模块，提供 Rust 工具链和环境变量
 - 工具链：通过 rust-overlay 获取最新稳定版 Rust，包含 rustfmt、clippy、rust-src、rust-analyzer
 - 目标：支持 x86_64-unknown-linux-musl 交叉编译
 - 环境变量：清华镜像（RUSTUP_DIST_SERVER、RUSTUP_UPDATE_ROOT）和 SCCACHE 缓存配置
-- 集成：在 flake.nix 的 homeModules 列表中作为独立模块，home-manager 自动合并配置
+
+#### Neovim 配置 (nix/neovim.nix)
+- 完整的 home-manager 模块，集中管理 Neovim 编辑器和工具配置
+- Packages：开发工具（gnumake、ripgrep、neovide）、Web 开发工具（biome、tailwindcss、prettier）、语言服务器
+- 配置文件：将项目根目录递归链接到 ~/.config/nvim，实现配置文件统一管理
+- 编辑器设置：启用 Neovim，设置为系统默认编辑器
+
+#### 集成方式
+在 flake.nix 的 homeModules.nvim-config 列表中导入所有模块：`[./nix/rust.nix, ./nix/neovim.nix]`。home-manager 会自动合并所有 home.packages、home.sessionVariables 和其他配置。
 
 ## 语言配置系统
 
