@@ -2,28 +2,24 @@
   description = "Standalone Neovim config";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "nixpkgs";
     rust-overlay = {
       url = "github:oxalica/rust-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs =
-    {
-      self,
-      nixpkgs,
-      rust-overlay,
-      ...
-    }:
-    {
-      _module.args.pkgs = import nixpkgs {
+  outputs = { self, nixpkgs, rust-overlay, ... }:
+    let
+      pkgs = import nixpkgs {
         system = "x86_64-linux";
         overlays = [ rust-overlay.overlays.default ];
       };
-homeModules.nvim-config = [
-  ./nix/rust.nix
-  ./nix/neovim.nix
-];
+    in
+    {
+      homeModules.nvim-config = [
+        ./nix/rust.nix
+        ./nix/neovim.nix
+      ];
     };
 }

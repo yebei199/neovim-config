@@ -17,7 +17,6 @@
       prettier
       vscode-langservers-extracted
     ];
-
     # 将项目配置文件递归链接到 ~/.config/nvim
     xdg.configFile."nvim" = {
       source = "/home/yb/RustroverProjects/neovim-config";
