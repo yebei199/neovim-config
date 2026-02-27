@@ -21,38 +21,9 @@
         system = "x86_64-linux";
         overlays = [ rust-overlay.overlays.default ];
       };
-      homeModules.nvim-config = [
-        ./nix/rust.nix
-
-        (({ pkgs, ... }: {
-          config = {
-            home.packages =
-              with pkgs;
-              [
-                gnumake
-                ripgrep
-                neovide
-                zk
-                choose
-
-                biome
-                tailwindcss
-                astro-language-server
-                prettier
-                vscode-langservers-extracted
-              ];
-
-            xdg.configFile."nvim" = {
-              source = "${self}";
-              recursive = true;
-            };
-
-            programs.neovim = {
-              enable = true;
-              defaultEditor = true;
-            };
-          };
-        }))
-      ];
+homeModules.nvim-config = [
+  ./nix/rust.nix
+  ./nix/neovim.nix
+];
     };
 }
