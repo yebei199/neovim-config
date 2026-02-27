@@ -1,12 +1,22 @@
 ## 安装
 
-### 插件管理器（Plugins manager）
+### 插件管理器（Lazy.nvim）
 
-配置不会自动安装 [`lazy.nvim`](https://lazy.folke.io)
+[lazy.nvim](https://lazy.folke.io) 由 Nix flake 自动管理，首次使用时自动安装，无需手动操作。
+
+**更新 lazy.nvim 到最新版本：**
+
 ```bash
-git clone --filter=blob:none --branch=stable https://github.com/folke/lazy.nvim.git ~/.local/share/nvim/lazy/lazy.nvim
+nix flake update lazy-nvim
 ```
 
+或同时更新所有依赖：
+
+```bash
+nix flake update
+```
+
+版本信息记录在 `flake.lock` 中。
 
 ## Features
 
