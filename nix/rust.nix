@@ -1,7 +1,7 @@
 # nix/rust.nix - Rust toolchain and environment as home-manager module
 # 将 Rust 工具链配置和环境变量作为 home-manager 模块导出
 # 包含：完整工具链、SCCACHE、镜像配置
-{ pkgs }:
+{ pkgs, ... }:
 {
   config = {
     home.packages = [
