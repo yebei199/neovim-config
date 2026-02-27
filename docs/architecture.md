@@ -33,11 +33,12 @@
 - `root.lua`: 项目根目录检测
 - `fs.lua`: 文件系统操作
 
-### Rust 工具链 (nix/rust.nix)
-- 通过 rust-overlay 获取最新稳定版 Rust
-- 包含 rustfmt、clippy、rust-src、rust-analyzer
-- 支持 x86_64-unknown-linux-musl 交叉编译目标
-- 配置清华镜像和 SCCACHE 缓存
+### Rust 工具链配置 (nix/rust.nix)
+- 完整的 home-manager 模块，提供 Rust 工具链和环境变量
+- 工具链：通过 rust-overlay 获取最新稳定版 Rust，包含 rustfmt、clippy、rust-src、rust-analyzer
+- 目标：支持 x86_64-unknown-linux-musl 交叉编译
+- 环境变量：清华镜像（RUSTUP_DIST_SERVER、RUSTUP_UPDATE_ROOT）和 SCCACHE 缓存配置
+- 集成：在 flake.nix 的 homeModules 列表中作为独立模块，home-manager 自动合并配置
 
 ## 语言配置系统
 
