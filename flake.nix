@@ -54,6 +54,16 @@
             enable = true;
             defaultEditor = true;
           };
+
+          home.sessionVariables = {
+            # Rust mirror configuration (Tsinghua)
+            RUSTUP_DIST_SERVER = "https://mirrors.tuna.tsinghua.edu.cn/rustup";
+            RUSTUP_UPDATE_ROOT = "https://mirrors.tuna.tsinghua.edu.cn/rustup/update";
+
+            # SCCACHE configuration
+            RUSTC_WRAPPER = "${pkgs.sccache}/bin/sccache";
+            SCCACHE_CACHE_SIZE = "10G";
+          };
         };
     };
 }
