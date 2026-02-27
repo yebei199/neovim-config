@@ -27,7 +27,7 @@
       RUSTUP_UPDATE_ROOT = "https://mirrors.tuna.tsinghua.edu.cn/rustup/update";
 
       # SCCACHE configuration
-      RUSTC_WRAPPER = "\${pkgs.sccache}/bin/sccache";
+      RUSTC_WRAPPER = "${pkgs.sccache}/bin/sccache";
       SCCACHE_CACHE_SIZE = "10G";
     };
   };
