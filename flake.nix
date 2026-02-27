@@ -9,36 +9,51 @@
     };
   };
 
-  outputs = { self, nixpkgs, rust-overlay, ... }: {
-    _module.args.pkgs = import nixpkgs {
-      system = "x86_64-linux";
-      overlays = [ rust-overlay.overlays.default ];
-    };
-    homeModules.nvim-config = { pkgs, ... }: {
-      home.packages = with pkgs; [
-        gnumake
-        ripgrep
-        neovide
-        zk
-        choose
-
-        biome
-        tailwindcss
-        astro-language-server
-        prettier
-        vscode-langservers-extracted
-
-      ];
-
-      xdg.configFile."nvim" = {
-        source = "${self}";
-        recursive = true;
+  outputs =
+    {
+      self,
+      nixpkgs,
+      rust-overlay,
+      ...
+    }:
+    {
+      _module.args.pkgs = import nixpkgs {
+        system = "x86_64-linux";
+        overlays = [ rust-overlay.overlays.default ];
       };
+      homeModules.nvim-config =
+        { pkgs, ... }:
+        let
+          rustConfig = import ./nix/rust.nix { inherit pkgs; };
+        in
+        {
+          home.packages =
+            with pkgs;
+            [
+              gnumake
+              ripgrep
+              neovide
+              zk
+              choose
 
-      programs.neovim = {
-        enable = true;
-        defaultEditor = true;
-      };
+              biome
+              tailwindcss
+              astro-language-server
+              prettier
+              vscode-langservers-extracted
+
+            ]
+            ++ rustConfig.all;
+
+          xdg.configFile."nvim" = {
+            source = "${self}";
+            recursive = true;
+          };
+
+          programs.neovim = {
+            enable = true;
+            defaultEditor = true;
+          };
+        };
     };
-  };
 }
