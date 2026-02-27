@@ -17,12 +17,14 @@
       };
     in
     {
-      homeModules.nvim-config = {
-        imports = [
-          ./nix/rust.nix
-          ./nix/neovim.nix
-        ];
-        _module.args.nvim_config_src = self;
-      };
+      homeModules.nvim-config = [
+        {
+          imports = [
+            ./nix/rust.nix
+            ./nix/neovim.nix
+          ];
+          _module.args.nvim_config_src = self;
+        }
+      ];
     };
 }
