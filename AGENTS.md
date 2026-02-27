@@ -1,19 +1,18 @@
-# Nix Configuration Rules
+1. 语言约定,内部英文思考和执行，仅在最终交付时用中文解释和问询用户
+2. 修改代码时同时更新对应的md文档,比如项目结构,同级doc目录下对应的文档, 更新文档时注意压缩信息, 而不是无限制增加细节, 以保持文档的简洁和可读性
+3. 需求模糊或存在多种实现方案时，必须先征求用户确认,禁止未征询明确指示就做假设或任意修改,重大架构调整或破坏性变更需获得用户同意
+4. 尽量使用高级抽象和语言特性来简化代码,以提高代码的表达力和可读性,遵守社区最佳实践和习惯用法
 
-## 1. Validation Rules
-
-- All changes must pass `nix flake check`
-- If errors occur, fix them according to the error messages - do not ignore errors
-
-## 2. File Organization Rules
-
-- Reasonably decouple and split nix files
-- Prohibit overly long files (recommended max 200 lines per file)
-- Split configurations by functional modules
-
-## 3. Comment Rules
-
-- Use Chinese for comments
-- Add explanatory comments at key parts
-- Every file must have a comment on the first line describing its purpose
+- 严格控制函数长度，单一职责，不超过 40 行
+- 嵌套不超过 3 层，优先使用提前返回（Guard Clauses）
+- 遵循单一职责原则
+- 禁止魔数或硬编码字符串, 和所有配置项、路径、固定值作为常量定义在函数外
+- 所有公有函数、类型、模块需有概括性的中文文档注释,讲清楚目的, 只需要包含以下内容：
+  设计意图,概括功能、参数
+- 合理拆分和解耦 nix 文件
+- 禁止文件过长（建议单文件最多 200 行）
+- 按功能模块拆分配置
+- 使用中文编写注释
+- 在关键部分添加解释注释
+- 每个文件必须在第一行有注释说明其目的
 
