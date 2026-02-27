@@ -18,8 +18,8 @@
     in
     {
       homeModules.nvim-config = [
-        (import ./nix/rust.nix { inherit self; })
-        (import ./nix/neovim.nix { inherit self; })
+        ./nix/rust.nix
+        ./nix/neovim.nix
       ];
     };
 }
