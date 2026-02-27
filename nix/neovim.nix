@@ -1,6 +1,6 @@
 # nix/neovim.nix - Neovim 编辑器配置、文件链接和开发工具
 # 集中管理：packages（工具依赖）、xdg.configFile（配置文件链接）、programs.neovim（编辑器设置）
-{ pkgs,... }:
+{ pkgs, self, ... }:
 {
   config = {
     # Neovim 开发工具和相关依赖
@@ -19,7 +19,7 @@
     ];
     # 将项目配置文件递徒链接到 ~/.config/nvim
     xdg.configFile."nvim" = {
-      source = builtins.toString ./.;
+      source = "${self}";
       recursive = true;
     };
 
