@@ -1,6 +1,6 @@
 # nix/neovim.nix - Neovim 编辑器配置、文件链接和开发工具
 # 集中管理：packages（工具依赖）、xdg.configFile（配置文件链接）、programs.neovim（编辑器设置）
-{ pkgs, nvim_config_src, ... }:
+{ pkgs, nvim_config_src, lazy-nvim, ... }:
 {
   config = {
     # Neovim 开发工具和相关依赖
@@ -17,6 +17,11 @@
       prettier
       vscode-langservers-extracted
     ];
+    # 将 lazy.nvim 源码链接到标准位置
+    xdg.dataFile."nvim/lazy/lazy.nvim" = {
+      source = lazy-nvim;
+      recursive = true;
+    };
     # 将项目配置文件递徒链接到 ~/.config/nvim
     xdg.configFile."nvim" = {
       source = "${nvim_config_src}";
