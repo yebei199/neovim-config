@@ -24,9 +24,8 @@
       homeModules.nvim-config = [
         ./nix/rust.nix
 
-        {
-          imports = [ ];
-          config = { pkgs, ... }: {
+        (({ pkgs, ... }: {
+          config = {
             home.packages =
               with pkgs;
               [
@@ -53,7 +52,7 @@
               defaultEditor = true;
             };
           };
-        }
+        }))
       ];
     };
 }
