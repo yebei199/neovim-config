@@ -1,5 +1,5 @@
 return {
-  formatter = "alejandra", -- Nix 社区推荐的格式化器
+  formatter = "nixpkgs-fmt",
   lsp = {
     nixd = {
       -- nixd 的配置项
