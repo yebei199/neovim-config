@@ -33,6 +33,12 @@
 - `root.lua`: 项目根目录检测
 - `fs.lua`: 文件系统操作
 
+### Rust 工具链 (nix/rust.nix)
+- 通过 rust-overlay 获取最新稳定版 Rust
+- 包含 rustfmt、clippy、rust-src、rust-analyzer
+- 支持 x86_64-unknown-linux-musl 交叉编译目标
+- 配置清华镜像和 SCCACHE 缓存
+
 ## 语言配置系统
 
 实现集中式管理：
