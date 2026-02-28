@@ -8,6 +8,7 @@
     home.packages = with pkgs; [
       gnumake
       ripgrep
+      lsof
       neovide
       zk
       choose
@@ -20,10 +21,13 @@
     ];
     # 首次 home-manager switch 时 clone lazy.nvim，目录已存在则跳过
     # 后续由 lazy.nvim 自身通过 git 管理更新，不再由 Nix 介入
+    # 注意：systemd 环境无 ssh，需禁用全局 insteadOf 规则强制 HTTPS
     home.activation.bootstrapLazyNvim = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       lazydir="$HOME/.local/share/nvim/lazy/lazy.nvim"
       if [ ! -d "$lazydir" ]; then
-        $DRY_RUN_CMD ${pkgs.git}/bin/git clone \
+        $DRY_RUN_CMD ${pkgs.git}/bin/git \
+          -c url."https://github.com/".insteadOf="git@github.com:" \
+          clone \
           --filter=blob:none \
           --branch=stable \
           https://github.com/folke/lazy.nvim.git \
