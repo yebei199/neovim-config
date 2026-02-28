@@ -22,11 +22,11 @@ return {
         ["<C-y>"] = "actions.copy_to_system_clipboard",
         ["<C-p>"] = "actions.paste_from_system_clipboard",
         ["<leader>R"] = "actions.refresh",
-        ["<leader>oh"] = { "actions.open_cwd", mode = "n" },
-        ["<leader>os"] = { "actions.change_sort", desc = "Oil change sort", mode = "n" },
+        ["<leader>fh"] = { "actions.open_cwd", mode = "n" },
+        ["<leader>fs"] = { "actions.change_sort", desc = "Oil change sort", mode = "n" },
         ["<leader>uh"] = { "actions.toggle_hidden", desc = "Oil toggle hidden", mode = "n" },
-        ["<leader>or"] = { "actions.toggle_trash", desc = "Oil trash", mode = "n" },
-        ["<leader>od"] = {
+        ["<leader>fr"] = { "actions.toggle_trash", desc = "Oil trash", mode = "n" },
+        ["<leader>fd"] = {
           desc = "Oil toggle detail",
           callback = function()
             vim.b.detail = not vim.b.detail

@@ -16,13 +16,13 @@ return {
     "OverseerClearCache",
   },
   keys = {
-    { "<leader>ow", "<cmd>OverseerToggle<cr>", desc = "list" },
-    { "<leader>oo", "<cmd>OverseerRun<cr>", desc = "Run" },
-    { "<leader>oq", "<cmd>OverseerQuickAction<cr>", desc = "Quick action" },
-    { "<leader>oi", "<cmd>OverseerInfo<cr>", desc = "Info" },
-    { "<leader>ob", "<cmd>OverseerBuild<cr>", desc = "Builder" },
-    { "<leader>ot", "<cmd>OverseerTaskAction<cr>", desc = "Task action" },
-    { "<leader>oc", "<cmd>OverseerClearCache<cr>", desc = "Clear cache" },
+    { "<leader>rw", "<cmd>OverseerToggle<cr>", desc = "list" },
+    { "<leader>ro", "<cmd>OverseerRun<cr>", desc = "Run" },
+    { "<leader>rq", "<cmd>OverseerQuickAction<cr>", desc = "Quick action" },
+    { "<leader>ri", "<cmd>OverseerInfo<cr>", desc = "Info" },
+    { "<leader>rb", "<cmd>OverseerBuild<cr>", desc = "Builder" },
+    { "<leader>rt", "<cmd>OverseerTaskAction<cr>", desc = "Task action" },
+    { "<leader>rc", "<cmd>OverseerClearCache<cr>", desc = "Clear cache" },
   },
   config = function()
     local overseer = require "overseer"
