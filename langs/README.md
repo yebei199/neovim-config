@@ -1,40 +1,24 @@
-# langs - 语言配置模块
+# langs — 语言工具链配置
 
-本目录存放各种编程语言的配置模块，提供了一种统一且易于维护的语言支持管理方式。每个文件都是一个完整的语言配置，包含LSP服务器、代码格式化工具、Treesitter解析器和语言特定的插件设置。
+每个文件对应一种编程语言，集中声明该语言的完整工具链配置，由 `lua/config/language.lua` 在对应 filetype 打开时按需加载。
 
-## 目录结构
+## 设计意图
 
-每个Lua文件对应一种编程语言，文件名为语言名称小写（如 `rust.lua`、`python.lua` 等）。
+将语言配置从 conform.nvim、nvim-lspconfig、nvim-treesitter 等各插件的配置文件中解耦出来，统一在单一文件中声明。修改一种语言的支持时只需编辑一个文件，添加新语言只需新建文件，无需同时改动多处插件配置。
 
-## 支持的语言
+## 配置结构
 
-目前配置了以下语言：
-- **C++** - cpp.lua，包含C++的LSP和格式化配置
-- **Python** - python.lua，Python开发工具链配置
-- **Rust** - rust.lua，Rust生态配置（包含rust-analyzer等）
-- **Lua** - lua.lua，Neovim配置本身所用的Lua配置
-- **JavaScript** - javascript.lua，JS/TS开发配置
-- **Nix** - nix.lua，Nix表达式语言配置
-- **Markdown** - markdown.lua，Markdown编写支持
-- **HTML** - html.lua，Web前端开发支持
-- **Fish** - fish.lua，Fish shell脚本编写支持
-- **Haskell** - haskell.lua，函数式编程语言配置
-- **QML** - qml.lua，Qt编程语言配置
-- **Dotfiles** - dotfile.lua，配置文件编写支持
+每个语言文件返回一张符合 `Config.LangConfig` 类型的表，包含以下可选字段：
 
-## 配置内容
+- `lsp` — LSP 服务器名称或含配置选项的表，由 `vim.lsp.config` 应用
+- `formatter` — conform.nvim 使用的 formatter 名称（单个或列表）
+- `treesitter` — treesitter parser 名称，默认按语言名自动推导
+- `pkgs` — Mason 安装包名（当包名与 lsp/formatter 名不一致时显式指定）
+- `plugins` — 语言专属的 lazy.nvim 插件 spec，随语言按需加载
+- `enabled` — 是否启用此语言配置，默认 true
 
-每个语言配置文件通常包括：
-- **LSP服务器** - 指定该语言的语言服务器（如rust-analyzer、pylance等）
-- **格式化工具** - 代码自动格式化（如rustfmt、black等）
-- **Treesitter解析器** - 语法树解析和高亮显示
-- **Mason包管理** - LSP和工具的自动安装和管理
-- **插件集成** - 语言特定的Neovim插件配置
+语言配置支持嵌套，可在一个文件中声明多个相关语言（如 javascript.lua 同时涵盖 TypeScript）。
 
-## 设计优势
+## 当前支持语言
 
-相比在多个配置文件中分散配置，统一的语言模块方式提供了：
-- 集中管理，每种语言的配置在一个文件中完整呈现
-- 易于维护，修改语言支持时只需编辑对应的单个文件
-- 扩展性强，添加新语言只需创建新文件，无需修改系统其他部分
-- 配置复用，相同配置可以在多个语言间共享
+cpp、python、rust、lua、javascript（含 TypeScript）、nix、markdown、html、fish、haskell、qml、dotfile

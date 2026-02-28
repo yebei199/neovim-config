@@ -1,40 +1,15 @@
-# nix - Nix环境配置
+# nix — Nix 环境声明模块
 
-本目录包含Nix表达式文件，用于声明式地定义Neovim环境和依赖。通过Nix配置，可以实现完全可复现的开发环境，确保在不同机器上的一致性。
+本目录以声明式方式定义 Neovim 运行环境所需的全部依赖，由项目根目录的 `flake.nix` 引入。Nix 的核心价值在于可复现性：所有插件版本通过 `flake.lock` 精确锁定，工具链（LSP、格式化器、CLI 工具）作为系统包声明，任何机器上 `nix build` 得到的结果都与 CI 完全一致，不依赖用户本地已安装的软件。
 
-## 目录结构
+与 lazy.nvim 的 lockfile 机制不同，本项目将插件版本管理完全交给 Nix flake，lazy.nvim 仅负责运行时的懒加载调度，而非版本控制。这使得插件版本与系统级依赖（如 ripgrep、neovide）统一在一个声明文件中管理，升级时只需更新 flake inputs 后运行 `nix flake update`。
 
-- **neovim.nix** - Neovim主包定义，配置Neovim编辑器、已安装的插件、依赖的工具和库
-- **rust.nix** - Rust工具链配置，定义Rust开发环境所需的工具和库
+## 文件职责
 
-## neovim.nix 说明
+**`neovim.nix`** 声明 Neovim 编辑器本身的完整环境：通过 `home.packages` 安装运行时依赖（ripgrep、neovide、zk、biome、prettier、tailwindcss、astro 语言服务器等），通过 `xdg.configFile."nvim"` 将本项目配置目录递归链接到 `~/.config/nvim`，通过 `xdg.dataFile."nvim/lazy/lazy.nvim"` 将 lazy.nvim 源码链接到标准数据目录，确保插件管理器在离线环境下可用。
 
-该文件定义了完整的Neovim包，包括：
-- Neovim核心编辑器和基础依赖
-- lazy.nvim插件管理器
-- 所有已启用的插件（通过flake配置管理版本）
-- LSP服务器和代码分析工具
-- 代码格式化工具（rustfmt、black等）
-- 编译和调试工具
-- 其他支持性软件（ripgrep、fd等）
+**`rust.nix`** 声明 Rust 开发工具链，包括编译器、cargo 相关工具以及 Rust 开发所需的系统级依赖，与 Neovim 的 Rust LSP 配置（`langs/rust.lua`）协同工作，保证工具链版本与编辑器集成一致。
 
-## rust.nix 说明
+## 与其他目录的关系
 
-该文件定义了Rust开发工具链，包括：
-- Rust编译器和工具链
-- Cargo包管理器
-- 调试器和分析工具
-- 与Neovim的集成支持
-
-## Nix的优势
-
-使用Nix管理Neovim环境提供了：
-- **可复现性** - 完整记录所有依赖版本，任何时间任何机器都能重现相同环境
-- **隔离性** - 环境与系统全局配置隔离，不影响其他应用
-- **声明式定义** - 环境状态完全由配置文件决定，易于版本控制和共享
-- **灵活切换** - 支持多个环境版本的快速切换和管理
-- **自动化** - 环境更新和依赖管理自动化，减少手工操作
-
-## 与 flake.nix 的关系
-
-项目根目录的 flake.nix 是Nix的主配置入口，定义了整个项目的Nix表达式结构和依赖来源。本目录的文件被根目录的flake.nix引入和使用，共同组成完整的环境定义。
+`langs/` 目录中的语言配置描述"Neovim 侧如何集成某语言"，而本目录中的 nix 文件负责"该语言工具是否安装在系统上"。两者共同构成完整的语言支持链。

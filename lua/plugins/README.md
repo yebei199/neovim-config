@@ -1,61 +1,15 @@
-# plugins - 插件规范与配置
+# plugins — 插件规范与配置
 
-本目录存放所有Neovim插件的规范和配置定义。使用lazy.nvim作为插件管理器，它提供了延迟加载、按需加载等高级特性，使得Neovim启动更快、内存占用更少。
+存放所有 lazy.nvim 插件声明，每个 `.lua` 文件返回一个或多个 lazy spec 表。插件版本由 Nix flake 管理（而非 lazy.nvim 自身的 lockfile），实现与系统环境的统一版本控制。
 
-## 插件管理理念
+## 子目录划分
 
-项目采用的插件策略强调：
-- **最小化** - 只安装必要的插件，避免功能冗余和性能负担
-- **分类清晰** - 按功能将插件分组，便于理解和维护
-- **声明式定义** - 使用lazy.nvim的规范方式定义插件，便于版本控制和共享
-- **高效加载** - 利用lazy.nvim的自动延迟加载特性，提高启动速度
+**component/** — 文件浏览（oil）、内容选择器（Telescope/Snacks picker）、内置终端，属于与编辑流程直接交互的 UI 组件。
 
-## 插件分类
+**editor/** — 扩展 Neovim 内建编辑能力的插件：快速跳转（flash）、配对符号管理（surround）、增强文本对象（mini-ai）、自动配对（pair）、行内 Git 差异（gitsign）、项目级搜索替换（grug-far）、替换增强（substitute）、格式转换（coerce）、复制历史（yanky）。
 
-项目将插件分为五个功能类别：
+**lsp/** — LSP 生态相关插件：工具安装管理（mason）、语法树解析（treesitter）、自动补全（complete）、诊断显示（diagnostic）、代码格式化（format）、TODO 注释（todo）、诊断汇总窗口（trouble）。具体语言的服务器配置不在此处，而在 `lua/config/langs/`。
 
-### component/ - UI组件和视觉增强
-负责用户界面的美化和增强：
-- **oil.lua** - 文件浏览器，提供类似Vim的文件操作体验
-- **picker.lua** - 选择器UI配置（Telescope集成）
-- **terminal.lua** - 终端集成，内置终端窗口管理
+**ui/** — 纯视觉层插件：配色方案（colorscheme）、状态栏与标签栏（heirline）、颜色值内联高亮（highlight-color）、通知系统（snacks）、标签栏（tabline）。
 
-### editor/ - 编辑功能增强
-提供代码编辑的高级功能：
-- 文本搜索替换、配对符号处理
-- 文本转换、多行编辑
-- 编辑辅助工具（flash快速导航等）
-
-### lsp/ - 语言服务器与智能编辑
-实现LSP集成和智能代码功能：
-- 自动补全、诊断提示
-- 代码格式化、Mason工具管理
-- Treesitter集成、故障排除工具
-
-### ui/ - 界面和主题
-控制整体用户界面和视觉样式：
-- 配色方案(colorscheme)管理
-- 状态栏(statusline/tabline)配置
-- 界面通知和提示系统
-
-### util/ - 工具类插件
-提供各种实用工具和功能扩展：
-- 快捷跳转、会话管理
-- 任务运行、知识库管理
-- Neovim开发支持、通知系统
-
-## Lazy.nvim特性
-
-项目利用lazy.nvim的以下特性：
-- **延迟加载** - 插件在使用时才加载，加快启动速度
-- **条件加载** - 根据文件类型、事件条件加载特定插件
-- **本地路径** - 支持直接引用本地插件源码
-- **版本管理** - 通过flake.lock实现确定性的版本控制
-
-## 扩展指南
-
-添加新插件时的步骤：
-1. 确定插件所属类别（或创建新类别）
-2. 创建相应的`.lua`文件并编写lazy.nvim规范
-3. 如需编译或预加载，在flake.nix中配置
-4. 重启Neovim测试验证
+**util/** — 工作流辅助插件：窗口扁平化（flatten）、文件标记跳转（grapple）、Neovim 开发支持（lazydev）、命令行重构（noice）、任务运行器（overseer）、小工具集合（snacks）、快捷键提示（whichkey）、知识库管理（zk）。

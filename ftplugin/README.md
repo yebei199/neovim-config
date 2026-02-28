@@ -1,27 +1,13 @@
-# ftplugin - 文件类型特定配置
+# ftplugin — 文件类型触发脚本
 
-本目录存放针对特定文件类型的Neovim配置脚本。Neovim会根据文件类型自动加载这些脚本，实现文件类型相关的定制化行为。
+本目录遵循 Neovim 原生的 `ftplugin` 机制：当编辑器打开某个 buffer 时，若其 `filetype` 与目录下某个文件名匹配，该文件会被自动 source。命名规则为 `{filetype}.lua`，每个文件只处理单一文件类型的局部配置。相比在 `autocmds` 中按 filetype 注册事件，ftplugin 目录的方式更贴近 Neovim 的内置约定，且无需手动监听 `FileType` 事件。
 
-## 目录结构
+与 `lua/config/autocmds/` 的区别在于：ftplugin 适合那些不需要与其他模块共享状态、独立完整的单文件类型集成；autocmds 则用于跨 filetype 或需要引用外部模块的通用逻辑。
 
-目录下的每个Lua文件对应一个文件类型，当打开该类型的文件时，Neovim会自动执行相应的脚本。文件命名约定为 `{filetype}.lua`。
+## 当前文件
 
-## 当前配置
+**`scrollback.lua`** 提供 Kitty 终端 scrollback pager 的 Neovim 集成。当 Kitty 配置了 `scrollback_pager nvim -c 'set filetype=scrollback'` 时，终端历史输出会以该 filetype 在 Neovim 中打开，此脚本随即自动执行。它通过 `Snacks.terminal.colorize()` 对 ANSI 转义序列进行着色还原，将 buffer 设置为只读（`modifiable = false`），隐藏状态栏（`laststatus = 0`）以减少视觉干扰，并绑定 `q` 和 `i` 两个快捷键直接退出，使终端历史的浏览体验接近专用 pager 工具。
 
-### scrollback.lua
+## 扩展方式
 
-本文件实现了对Kitty终端的集成。Kitty是一个高效的终端模拟器，支持自定义scrollback pager功能。通过该配置，Neovim可以被设置为Kitty的scrollback pager，用户在终端中向上滚动查看历史输出时，会以Neovim编辑器的形式展示，可以进行搜索、编辑等操作。
-
-该集成提供了：
-- 轻量化的scrollback UI，只做最基本的着色和快捷键配置
-- 与Kitty的无缝集成，在terminal配置中启用后自动生效
-- 保持Neovim的高效特性，不引入复杂依赖
-
-## 使用场景
-
-ftplugin配置适合用于：
-- 为特定文件类型设置专用的快捷键或选项
-- 实现文件类型相关的自动化行为
-- 集成特定应用或工具（如终端、数据库等）
-
-这种方式比修改全局配置更加模块化和可维护，使得配置的作用域清晰明确。
+若需为其他文件类型添加局部配置，只需在本目录创建对应的 `{filetype}.lua` 文件，无需修改任何现有代码。

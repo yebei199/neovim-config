@@ -1,49 +1,13 @@
-# highlight - 高亮管理工具模块
+# highlight — 高亮组管理
 
-## 模块概述
+封装 Neovim 高亮组的读取与设置操作，为 `lua/config/highlight.lua` 和主题相关配置提供统一的 API，避免直接散用 `vim.api.nvim_set_hl` 和 `vim.api.nvim_get_hl`。
 
-highlight 模块是 Neovim 配置中的专用工具，专注于代码高亮和颜色管理。该模块提供完整的 API，用于获取、设置和覆盖 Neovim 高亮组，为主题定制提供支持。通过抽象接口，简化颜色系统操作。
+## 文件
 
-## 核心功能
+- `fn.lua` — 核心函数：`get_by_name(name)` 获取高亮组定义，`setter` / `getter` 元表实现链式读写
+- `init.lua` — 对外暴露的 `set_highlight(config)` 函数，接受高亮配置表并批量应用；支持 `override`（覆盖现有定义）和 `lingshin`（基于现有颜色派生新高亮）两种应用模式
+- `type.lua` — `Config.HighlightTable` 和 `Config.Highlight` 类型定义，供 LuaLS 提供类型提示
 
-模块核心功能包括：
+## 设计意图
 
-- **高亮获取**：便捷获取高亮组定义
-- **高亮设置**：动态设置颜色属性
-- **高亮覆盖**：覆盖现有定义
-- **类型安全**：Lua 类型确保配置正确
-
-## 文件结构
-
-模块包含三个文件：
-
-### fn.lua - 功能函数
-
-- `get_by_name(name)`：获取高亮定义
-- `setter`：元表设置器，支持扩展
-- `getter`：元表获取器
-
-### init.lua - 初始化
-
-- `set_highlight(config)`：应用配置
-- 支持 override 和 lingshin 类型
-
-### type.lua - 类型定义
-
-- `Config.HighlightTable`：高亮表类型
-- `Config.Highlight`：配置类型
-
-## 与 Neovim 颜色系统关系
-
-模块深度集成 Neovim 颜色系统，直接操作高亮组，支持主题兼容、动态调整和命名空间隔离。
-
-## 模块集成
-
-highlight 模块与其他模块集成：
-
-- 被主题配置调用应用高亮
-- 为插件提供颜色接口
-- 支持用户定制
-- 与 utils 模块协同工作
-
-该模块是颜色管理的基础设施，确保系统颜色一致性。
+colorscheme 切换后需要重新应用自定义高亮，统一通过此模块中的接口注册覆盖规则，由 `ColorScheme` autocommand 统一重放，保证高亮覆盖的一致性和幂等性。

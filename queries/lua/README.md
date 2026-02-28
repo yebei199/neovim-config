@@ -1,46 +1,13 @@
-# Lua TreeSitter 查询定义
+# queries/lua — Lua 语言 TreeSitter 查询
 
-## 概述
+本目录为 Lua 语言提供自定义 TreeSitter 高亮查询，专门针对 Neovim 配置代码的编写场景进行优化。
 
-本目录包含Lua语言的TreeSitter查询文件，用于定义语法高亮和代码分析规则。查询文件采用Scheme语法，通过模式匹配提供精确的代码结构识别和样式定义。
+## 文件职责
 
-## TreeSitter查询简介
+**`highlights.scm`** 以 `;;extends` 声明模式追加在内置 Lua 高亮规则之上。当前包含一条规则：将名称等于 `vim` 的标识符节点标记为 `@namespace.builtin` 高亮分组。
 
-TreeSitter查询使用S表达式语法，在语法树中匹配特定代码模式。支持定义高亮规则、折叠边界、文本对象等功能，相较正则表达式更加准确和强大。
+这条规则的背景是：标准 Lua TreeSitter 解析器将 `vim` 视为普通的全局变量标识符，不赋予任何特殊语义。但在 Neovim 配置代码中，`vim` 是核心 API 对象，其下挂载了 `vim.api`、`vim.fn`、`vim.opt` 等命名空间。将其标记为内置命名空间后，主流配色方案（如 tokyonight、catppuccin）会将 `vim` 渲染成与普通变量不同的颜色，使其在代码中视觉上更突出，降低阅读配置文件时的认知成本。
 
-## 目录结构
+## 查询机制说明
 
-```
-queries/lua/
-├── highlights.scm    # 语法高亮定义
-└── README.md         # 说明文档
-```
-
-## 当前配置
-
-### highlights.scm
-
-该文件扩展基础Lua高亮规则：
-
-```scheme
-;; extends
-((identifier) @namespace.builtin
-  (#eq? @namespace.builtin "vim"))
-```
-
-此规则将`vim`标识符标记为内置命名空间，确保在Neovim Lua配置中正确高亮显示。
-
-## 查询类型
-
-- **高亮查询**：定义代码元素颜色和样式
-- **折叠查询**：指定可折叠代码块边界
-- **局部查询**：分析变量作用域和生命周期
-- **缩进查询**：定义自动缩进规则
-
-## Neovim集成
-
-查询文件自动集成到Neovim TreeSitter系统，提供精确语法分析、性能优化和插件支持。
-
-## 扩展指南
-
-添加新查询时，创建.scm文件，使用S表达式编写模式，测试匹配效果。注意保持精确性，遵循Lua语法规范。
+`;;extends` 指令告知 Neovim 不替换内置的 Lua 高亮查询，而是在其基础上追加本文件中的规则。这意味着内置的关键字、字符串、函数等高亮规则不受影响，本目录只做增量定制。若要完全替换某语言的高亮逻辑，去掉 `;;extends` 即可，但这会导致所有内置规则失效，通常不推荐。
