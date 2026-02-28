@@ -1,6 +1,6 @@
 # neovim-config
 
-基于 Nix + lazy.nvim 的模块化 Neovim 配置。所有插件版本通过 `flake.lock` 锁定，依赖由 Nix 统一声明，保证环境可复现。语言工具链（LSP、formatter、treesitter、语言专属插件）集中在单一文件中配置，避免跨多个插件配置文件分散管理的痛点。
+基于 Nix + lazy.nvim 的模块化 Neovim 配置。Neovim 插件版本通过 Nix flake 及 flake.lock 锁定，依赖由 Nix 统一声明保证环境可复现。lazy.nvim 插件管理器不再由 flake 管理，通过 activation script 首次 clone 后自我更新。语言工具链（LSP、formatter、treesitter、语言专属插件）集中在单一文件中配置，避免跨多个插件配置文件分散管理的痛点。
 
 ## 顶层目录结构
 

@@ -6,7 +6,7 @@
 
 ## 文件职责
 
-**`neovim.nix`** 声明 Neovim 编辑器本身的完整环境：通过 `home.packages` 安装运行时依赖（ripgrep、neovide、zk、biome、prettier、tailwindcss、astro 语言服务器等），通过 `xdg.configFile."nvim"` 将本项目配置目录递归链接到 `~/.config/nvim`，通过 `xdg.dataFile."nvim/lazy/lazy.nvim"` 将 lazy.nvim 源码链接到标准数据目录，确保插件管理器在离线环境下可用。
+**`neovim.nix`** 声明 Neovim 编辑器本身的完整环境：通过 `home.packages` 安装运行时依赖（ripgrep、neovide、zk、biome、prettier、tailwindcss、astro 语言服务器等），通过 `xdg.configFile."nvim"` 将本项目配置目录递归链接到 `~/.config/nvim`。lazy.nvim 插件管理器通过 home-manager activation script 在首次 `home-manager switch` 时自动 clone 到 `~/.local/share/nvim/lazy/lazy.nvim`；若目录已存在则跳过，后续由 lazy.nvim 自身通过 git 管理更新，Nix 不再介入版本控制，解决了符号链接导致 git 无法更新的问题。
 
 **`rust.nix`** 声明 Rust 开发工具链，包括编译器、cargo 相关工具以及 Rust 开发所需的系统级依赖，与 Neovim 的 Rust LSP 配置（`langs/rust.lua`）协同工作，保证工具链版本与编辑器集成一致。
 

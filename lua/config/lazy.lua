@@ -1,5 +1,12 @@
--- git clone --filter=blob:none --branch=stable https://github.com/folke/lazy.nvim.git ~/.local/share/nvim/lazy/lazy.nvim
+-- lazy.nvim 插件管理器初始化与配置
+-- 首次启动自动 clone；后续由 lazy.nvim 自身管理更新
 local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+  vim.fn.system {
+    "git", "clone", "--filter=blob:none", "--branch=stable",
+    "https://github.com/folke/lazy.nvim.git", lazypath,
+  }
+end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy.core.handler.event").mappings.LazyFile = {

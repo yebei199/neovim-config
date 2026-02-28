@@ -5,7 +5,7 @@ Neovim 编辑器的初始化层，负责将选项、快捷键、事件处理、�
 ## 顶层文件
 
 - `options.lua` — 全局编辑器选项，包括行号、缩进、搜索、折叠、滚动等基础设置
-- `lazy.lua` — lazy.nvim 插件管理器的初始化，指定插件目录和加载策略
+- `lazy.lua` — lazy.nvim 插件管理器的初始化，检查并自动执行 bootstrap（首次启动时 clone lazy.nvim），之后加载插件
 - `language.lua` — 语言配置系统的核心调度逻辑，按 filetype 事件加载对应语言模块
 - `highlight.lua` — 在 colorscheme 加载后应用的自定义高亮覆盖
 - `icons.lua` — 统一的图标常量定义，供状态栏、诊断、文件树等组件引用

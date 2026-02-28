@@ -7,13 +7,9 @@
       url = "github:oxalica/rust-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    lazy-nvim = {
-      url = "github:folke/lazy.nvim";
-      flake = false;
-    };
   };
 
-  outputs = { self, nixpkgs, rust-overlay, lazy-nvim, ... }:
+  outputs = { self, nixpkgs, rust-overlay, ... }:
     let
       pkgs = import nixpkgs {
         system = "x86_64-linux";
@@ -29,7 +25,6 @@
           ];
           _module.args = {
             nvim_config_src = self;
-            lazy-nvim = lazy-nvim;
           };
         }
       ];
