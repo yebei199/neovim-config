@@ -1,32 +1,29 @@
--- opencode.nvim 快捷键
+-- opencode.nvim 快捷键（sudo-tee/opencode.nvim）
 -- <leader>o 前缀作为 opencode AI 助手的统一交互入口
+-- 全局键在此文件管理；窗口内快捷键（<tab>/<esc>/<S-CR>等）在 setup() 中配置
 local map = vim.keymap.set
+local api = function() return require("opencode.api") end
 
--- Ask: 注入 @this 上下文并提交
-map({ "n", "x" }, "<leader>oa", function()
-  require("opencode").ask("@this: ", { submit = true })
-end, { desc = "Ask opencode" })
+-- 面板控制
+map("n", "<leader>ot", function() api().toggle() end, { desc = "Toggle opencode" })
+map("n", "<leader>og", function() api().toggle_focus() end, { desc = "Focus opencode / last window" })
+map("n", "<leader>oq", function() api().close() end, { desc = "Close opencode" })
 
--- Select: 选择预设 prompt 或命令
-map({ "n", "x" }, "<leader>os", function()
-  require("opencode").select()
-end, { desc = "Select opencode action" })
+-- 输入窗口
+map("n", "<leader>oi", function() api().open_input() end, { desc = "Open input (current session)" })
+map("n", "<leader>oa", function() api().open_input_new_session() end, { desc = "Open input (new session)" })
 
--- Toggle: 显示/隐藏 opencode 面板
-map("n", "<leader>ot", function()
-  require("opencode").toggle()
-end, { desc = "Toggle opencode" })
+-- Session 管理
+map("n", "<leader>os", function() api().select_session() end, { desc = "Select session" })
+map("n", "<leader>oT", function() api().timeline() end, { desc = "Session timeline" })
 
--- Operator: 把选中范围/当前行加入上下文
-map({ "n", "x" }, "<leader>og", function()
-  return require("opencode").operator("@this ")
-end, { desc = "Add range to opencode", expr = true })
+-- Provider/Model 切换
+map("n", "<leader>op", function() api().configure_provider() end, { desc = "Configure provider/model" })
 
--- Scroll: 在 opencode 面板中滚动
-map("n", "<leader>ou", function()
-  require("opencode").command("session.half.page.up")
-end, { desc = "Scroll opencode up" })
+-- Diff 与回滚
+map("n", "<leader>od", function() api().diff_open() end, { desc = "Diff: view AI changes" })
+map("n", "<leader>ou", function() api().diff_revert_all_last_prompt() end, { desc = "Revert last prompt changes" })
+map("n", "<leader>oU", function() api().diff_revert_all_session() end, { desc = "Revert all session changes" })
 
-map("n", "<leader>od", function()
-  require("opencode").command("session.half.page.down")
-end, { desc = "Scroll opencode down" })
+-- Quick chat
+map({ "n", "x" }, "<leader>o/", function() api().quick_chat() end, { desc = "Quick chat" })
