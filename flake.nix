@@ -22,6 +22,7 @@
           imports = [
             ./nix/rust.nix
             ./nix/neovim.nix
+            ./nix/github.nix
           ];
           _module.args = {
             nvim_config_src = self;
