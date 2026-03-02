@@ -1,5 +1,5 @@
 return {
-  formatter = "nixpkgs-fmt",
+  formatter = "nixfmt",
   lsp = {
     nixd = {
       -- nixd 的配置项
