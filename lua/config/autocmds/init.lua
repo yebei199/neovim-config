@@ -11,13 +11,13 @@ autocmd({ "BufEnter", "BufWinEnter" }, {
   end,
 })
 
--- Auto Format
-autocmd("BufWritePre", {
-  desc = "Auto Format buffer",
-  callback = function(args)
-    if vim.g.autoformat and vim.b.autoformat ~= false then require("conform").format { bufnr = args.buf } end
-  end,
-})
+-- DEPRECATED: Auto Format on save - 已移至 TextChanged 防抖机制
+-- autocmd("BufWritePre", {
+--   desc = "Auto Format buffer",
+--   callback = function(args)
+--     if vim.g.autoformat and vim.b.autoformat ~= false then require("conform").format { bufnr = args.buf } end
+--   end,
+-- })
 
 -- Highlight on yank
 autocmd("TextYankPost", {
