@@ -12,3 +12,4 @@
 - `snacks.lua` — folke/snacks.nvim 的通用小工具配置，提供 dashboard、input、lazygit 集成等多个独立功能模块
 - `whichkey.lua` — 按下 Leader 键后实时展示可用快捷键及其描述，降低快捷键记忆负担，也作为快捷键文档的可视化入口
 - `zk.lua` — 与 zk（Zettelkasten 笔记工具）的集成，支持在 Neovim 内创建、搜索、链接知识库笔记
+- `session.lua` — persisted.nvim session 管理，按 cwd + git branch 存档/恢复编辑状态。与 snacks dashboard 项目列表联动：从项目列表选择时自动加载该项目的 session，退出时自动存档

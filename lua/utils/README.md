@@ -12,6 +12,7 @@
 - `root.lua` — 项目根目录识别，基于 `.git`、`flake.nix` 等标志文件向上查找
 - `profiler.lua` — 启动性能分析工具，测量模块加载耗时
 - `plugin.lua` — 插件开发辅助（延迟调用、条件执行等）
+- `tokei.lua` — 异步调用 tokei 获取项目语言占比，磁盘缓存结果（TTL 6 小时），格式化为 dashboard 可用的进度条字符串
 
 ## 子目录
 

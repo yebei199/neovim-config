@@ -12,6 +12,7 @@
       neovide
       zk
       choose
+      tokei
 
       biome
       tailwindcss
