@@ -1,6 +1,6 @@
 # nix/rust.nix - Rust toolchain and environment as home-manager module
 # 将 Rust 工具链配置和环境变量作为 home-manager 模块导出
-# 包含：完整工具链、SCCACHE、mold 链接器、cargo 配置
+# 包含：完整工具链、SCCACHE、mold 链接器、cargo 配置、cargo-nextest 测试运行器、codelldb 调试适配器
 { pkgs, ... }:
 {
   config = {
@@ -25,6 +25,8 @@
       pkgs.cargo-sweep
       pkgs.musl
       pkgs.musl.dev
+      pkgs.cargo-nextest
+      pkgs.vscode-extensions.vadimcn.vscode-lldb
     ];
 
     home.sessionVariables = {
