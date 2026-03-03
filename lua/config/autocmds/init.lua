@@ -1,6 +1,33 @@
 local autocmd = vim.api.nvim_create_autocmd
 local augroup = function(name) return vim.api.nvim_create_augroup("lingshin_" .. name, { clear = true }) end
 
+-- Debounce timers for per-buffer formatting
+local debounce_timers = {}
+
+---防抖格式化：3秒后执行，多次修改只触发一次
+local function setup_debounce_format(bufnr)
+  -- 取消已存在的 timer
+  if debounce_timers[bufnr] then
+    vim.fn.timer_stop(debounce_timers[bufnr])
+  end
+
+  -- 创建新的 3 秒 timer
+  debounce_timers[bufnr] = vim.fn.timer_start(3000, function()
+    -- 确保缓冲区仍有效且自动格式化启用
+    if vim.api.nvim_buf_is_valid(bufnr) and vim.g.autoformat and vim.b[bufnr].autoformat ~= false then
+      pcall(require("conform").format, { bufnr = bufnr, async = true })
+    end
+    debounce_timers[bufnr] = nil
+  end, { ["repeat"] = 1 })
+end
+
+---清理缓冲区的 timer
+local function cleanup_debounce_timer(bufnr)
+  if debounce_timers[bufnr] then
+    vim.fn.timer_stop(debounce_timers[bufnr])
+    debounce_timers[bufnr] = nil
+  end
+end
 -- Auto Chdir
 autocmd({ "BufEnter", "BufWinEnter" }, {
   desc = "Auto change dir to root",
@@ -11,13 +38,32 @@ autocmd({ "BufEnter", "BufWinEnter" }, {
   end,
 })
 
--- DEPRECATED: Auto Format on save - 已移至 TextChanged 防抖机制
--- autocmd("BufWritePre", {
---   desc = "Auto Format buffer",
---   callback = function(args)
---     if vim.g.autoformat and vim.b.autoformat ~= false then require("conform").format { bufnr = args.buf } end
---   end,
--- })
+-- Debounced Auto Format on modification (TextChanged)
+autocmd({ "TextChanged", "TextChangedI" }, {
+  desc = "Debounced auto format (3s)",
+  callback = function(args)
+    setup_debounce_format(args.buf)
+  end,
+})
+
+-- Cleanup debounce timer on buffer unload
+autocmd("BufUnload", {
+  desc = "Cleanup debounce timer",
+  callback = function(args)
+    cleanup_debounce_timer(args.buf)
+  end,
+})
+
+-- Final format on save to ensure disk consistency
+autocmd("BufWritePre", {
+  desc = "Final format on save",
+  callback = function(args)
+    if vim.g.autoformat and vim.b.autoformat ~= false then
+      -- 同步执行，确保保存前格式化完成
+      pcall(require("conform").format, { bufnr = args.buf, async = false })
+    end
+  end,
+})
 
 -- Highlight on yank
 autocmd("TextYankPost", {
