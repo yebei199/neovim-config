@@ -70,3 +70,17 @@
 3. 延迟加载键映射、自动命令和高亮
 4. 初始化语言配置系统
 5. 应用颜色方案 (tokyonight)
+## 自动格式化机制
+
+项目实现了基于防抖（Debounce）的混合自动格式化机制，旨在平衡编辑流畅度与磁盘一致性。
+
+### 触发机制
+
+1. **实时防抖 (TextChanged)**：当缓冲区内容发生变化时，触发 3 秒延迟计时器。若在 3 秒内再次修改，计时器重置。计时器到期后异步执行格式化。这种方式避免了高频编辑时的卡顿，提供平滑的 UI 反馈。
+2. **保存同步 (BufWritePre)**：在执行写盘操作前，同步触发一次格式化。这确保了最终写入磁盘的文件始终符合格式规范，保证了代码在版本控制中的一致性。
+
+### 配置与开关
+
+- **全局开关**：通过 `vim.g.autoformat` 控制。
+- **缓冲区开关**：通过 `vim.b.autoformat` 实现精细化控制（例如在特定大文件或第三方代码中禁用）。
+- **支持工具**：格式化能力由 `conform.nvim` 提供，具体格式化器在 `lua/config/langs/` 中按语言声明。已支持：`stylua` (Lua), `rustfmt` (Rust), `ruff` (Python), `nixfmt` (Nix), `prettier` (JS/TS), `biome` (HTML/CSS), `clang-format` (C++), `fourmolu` (Haskell), `cabal-fmt` (Cabal) 等。
