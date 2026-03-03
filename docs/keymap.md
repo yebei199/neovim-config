@@ -93,11 +93,11 @@
 | `<C-y>`      | 复制到系统剪贴板       |
 | `<C-p>`      | 从系统剪贴板粘贴       |
 | `<leader>R`  | 刷新             |
-| `<leader>oh` | 打开 cwd         |
-| `<leader>os` | 更改排序           |
+| `<leader>fh` | 打开 cwd         |
+| `<leader>fs` | 更改排序           |
 | `<leader>uh` | 切换隐藏文件         |
-| `<leader>or` | 切换回收站          |
-| `<leader>od` | 切换详细信息         |
+| `<leader>fr` | 切换回收站          |
+| `<leader>fd` | 切换详细信息         |
 | `<c-\>`      | 在当前目录打开终端      |
 | `<leader>fz` | 通过 Zoxide 跳转目录 |
 
@@ -270,15 +270,37 @@
 
 ## AI 助手 `<leader>o`（opencode）
 
-| 快捷键          | 模式  | 说明              |
-|--------------|-----|-----------------|
-| `<leader>oa` | n/x | Ask：注入当前上下文并提问   |
-| `<leader>os` | n/x | 选择预设 prompt 或命令 |
-| `<leader>ot` | n   | 显示/隐藏 opencode 面板 |
-| `<leader>og` | n/x | 将选区/当前行加入上下文    |
-| `<leader>ou` | n   | 面板内向上滚动         |
-| `<leader>od` | n   | 面板内向下滚动         |
-
+| 快捷键            | 模式  | 说明                   |
+|-----------------|-----|----------------------|
+| `<leader>oi`    | n   | 打开输入框（当前 session）    |
+| `<leader>oI`    | n   | 打开输入框（新 session）     |
+| `<leader>og`    | n   | 切换 opencode 窗口       |
+| `<leader>oq`    | n   | 关闭 opencode          |
+| `<leader>ot`    | n   | 切换焦点（opencode/编辑器）   |
+| `<leader>oT`    | n   | Session 时间线          |
+| `<leader>os`    | n   | 选择 session           |
+| `<leader>oR`    | n   | 重命名 session          |
+| `<leader>oh`    | n   | 历史记录                 |
+| `<leader>oo`    | n   | 打开输出窗口               |
+| `<leader>op`    | n   | 配置 provider/model     |
+| `<leader>oV`    | n   | 配置 model variant      |
+| `<leader>oz`    | n   | 缩放窗口                 |
+| `<leader>ox`    | n   | 交换窗口位置               |
+| `<leader>ov`    | n   | 从剪贴板粘贴图片             |
+| `<leader>oy`    | v   | 将选区加入上下文             |
+| `<leader>od`    | n   | 查看 diff              |
+| `<leader>oc`    | n   | 关闭 diff              |
+| `<leader>o]`    | n   | 下一个 diff             |
+| `<leader>o[`    | n   | 上一个 diff             |
+| `<leader>ora`   | n   | 回滚最后 prompt 的所有改动    |
+| `<leader>ort`   | n   | 回滚最后 prompt 的当前文件改动  |
+| `<leader>orA`   | n   | 回滚 session 所有改动      |
+| `<leader>orT`   | n   | 回滚 session 当前文件改动    |
+| `<leader>orr`   | n   | 恢复文件快照               |
+| `<leader>orR`   | n   | 恢复所有文件快照             |
+| `<leader>otr`   | n   | 切换推理输出显示             |
+| `<leader>ott`   | n   | 切换工具调用输出显示           |
+| `<leader>o/`    | n/x | Quick chat            |
 ---
 
 ## 任务运行 `<leader>r`（Overseer）
