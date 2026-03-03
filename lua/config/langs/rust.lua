@@ -27,7 +27,7 @@ return {
             default_settings = {
               ["rust-analyzer"] = {
                 cargo = { allFeatures = true, loadOutDirsFromCheck = true, buildScripts = { enable = true } },
-                checkOnSave = true,
+                checkOnSave = { command = "clippy" },
                 diagnostics = { enable = true },
                 procMacro = {
                   enable = true,
