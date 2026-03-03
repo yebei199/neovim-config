@@ -1,6 +1,6 @@
 -- lua/plugins/ui/snacks.lua
 -- Snacks.nvim dashboard 配置：首屏以项目列表为主体，右侧展示 GitHub 通知。
--- 左侧：自定义 fn section 展示最近项目（含 tokei 语言占比）+ 快捷键；
+-- 左侧：自定义 fn section 展示最近项目（含 tokei 语言占比）+ 快捷键（p 键打开全量可搜索的项目 picker）；
 -- 右侧（width>135）：gh-notify 终端 + 启动耗时。
 -- 项目选择时通过 persisted.nvim 自动恢复该 cwd 的 session。
 
@@ -93,6 +93,7 @@ return {
           { icon = " ", key = "f", desc = "Find File",    action = pick("files") },
           { icon = " ", key = "n", desc = "New File",     action = ":ene | startinsert" },
           { icon = " ", key = "r", desc = "Recent Files", action = pick("oldfiles") },
+          { icon = " ", key = "p", desc = "Projects",     action = function() Snacks.picker.projects() end },
           { icon = " ", key = "q", desc = "Quit",         action = ":qa" },
         },
       },

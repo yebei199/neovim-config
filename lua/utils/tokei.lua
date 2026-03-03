@@ -1,7 +1,7 @@
 -- lua/utils/tokei.lua
 -- tokei 语言统计工具：异步扫描项目目录，磁盘缓存结果，供 dashboard fn section 调用。
--- 缓存路径：stdpath("data")/tokei_cache.json，TTL 6 小时。
--- 首次打开 dashboard 时触发后台扫描，后续打开直接读缓存（几乎零延迟）。
+-- tokei 二进制路径通过 vim.fn.exepath() 在模块加载时解析为绝对路径，避免硬编码。
+-- 缓存路径：stdpath("data")/tokei_cache.json，TTL 6 小时。首次打开 dashboard 时触发后台扫描，后续打开直接读缓存（几乎零延迟）。
 
 local M = {}
 
@@ -9,6 +9,7 @@ local CACHE_PATH = vim.fn.stdpath("data") .. "/tokei_cache.json"
 local CACHE_TTL = 6 * 3600  -- 6 小时（秒）
 local TOP_LANGS = 3          -- 最多显示语言数
 local BAR_WIDTH = 8          -- 进度条字符宽度
+local TOKEI_BIN = vim.fn.exepath("tokei")  -- tokei 二进制绝对路径，模块加载时解析
 
 -- 从磁盘加载缓存，失败返回空表
 local function load_cache()
@@ -65,8 +66,13 @@ end
 -- 异步扫描目录，完成后调用 cb(langs)，失败调用 cb(nil)
 -- langs: {{lang: string, pct: number}, ...}
 function M.scan(path, cb)
+  if TOKEI_BIN == "" then
+    vim.schedule(function() cb(nil) end)
+    return
+  end
+
   vim.system(
-    { "tokei", "--sort", "lines", "--output", "json", path },
+    { TOKEI_BIN, "--sort", "lines", "--output", "json", path },
     { text = true, timeout = 15000 },
     function(result)
       if result.code ~= 0 then
