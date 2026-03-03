@@ -19,6 +19,10 @@
       astro-language-server
       prettier
       vscode-langservers-extracted
+      stylua
+      fourmolu
+      cabal-fmt
+      clang-tools
     ];
     # 首次 home-manager switch 时 clone lazy.nvim，目录已存在则跳过
     # 后续由 lazy.nvim 自身通过 git 管理更新，不再由 Nix 介入
