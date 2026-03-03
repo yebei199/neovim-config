@@ -1,6 +1,6 @@
 -- opencode.nvim 插件声明
 -- sudo-tee/opencode.nvim：Neovim-native 的 opencode 前端，提供双面板 UI、diff 回滚、session 管理
--- 全局快捷键在 lua/config/keymaps/opencode.lua 中单独管理
+-- 默认 agent 为 atlas；<leader>o 前缀的完整键位由插件内置 default_global_keymaps 统一管理
 return {
   "sudo-tee/opencode.nvim",
   dependencies = {
@@ -45,9 +45,9 @@ return {
   },
   config = function()
     require("opencode").setup({
-      -- 全局键在 keymaps/opencode.lua 中统一管理，禁用插件默认全局键
-      default_global_keymaps = false,
-      default_mode = "build",
+      -- default_global_keymaps = true 启用完整内置 <leader>o 键位体系
+      default_global_keymaps = true,
+      default_mode = "atlas",
       ui = {
         position = "right",
         window_width = 0.40,
