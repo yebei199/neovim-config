@@ -21,6 +21,7 @@ return {
           below = "",
           language_border = "",
           right_pad = 1,
+          disable = {},
         },
         heading = {
           sign = false,
