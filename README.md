@@ -5,7 +5,6 @@
 ## 顶层目录结构
 
 - `lua/` — 配置主体，分 config（初始化）、plugins（插件声明）、utils（工具库）三层
-- `langs/` — 各编程语言的工具链配置，每个文件独立声明一种语言的完整支持
 - `nix/` — Nix 环境声明文件，由根目录 `flake.nix` 引入，管理插件和系统级依赖
 - `ftplugin/` — 文件类型触发脚本，Neovim 按 filetype 自动加载
 - `queries/` — 自定义 TreeSitter `.scm` 查询，扩展或覆盖内置高亮规则

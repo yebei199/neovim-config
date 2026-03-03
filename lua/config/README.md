@@ -17,6 +17,6 @@ Neovim 编辑器的初始化层，负责将选项、快捷键、事件处理、�
 
 **keymaps/** 按功能模块拆分快捷键，每个文件对应一个功能域（文件、Git、LSP、搜索、调试、开关、窗口、缩写），便于查找和修改，降低冲突风险。
 
-**langs/** 存放在配置加载阶段（非 filetype 触发阶段）需要应用的语言相关设置，与根目录 `langs/` 配合构成完整的语言支持体系。
+**langs/** 存放各编程语言的工具链规格（LSP、formatter、treesitter、专属插件），由 `language.lua` 按 filetype 事件按需加载，每个文件对应一种语言的完整配置。
 
 **pickers/** 定义超出 Telescope 内置能力的自定义选择器，例如按语言配置状态过滤并可跳转的 FileType Picker。

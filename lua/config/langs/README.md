@@ -1,9 +1,24 @@
-# config/langs — 配置阶段语言设置
+# langs — 语言工具链配置
 
-存放需要在 Neovim 配置加载阶段（而非 filetype 事件触发时）应用的语言相关设置，与根目录 `langs/` 协同构成完整的语言支持体系。
+每个文件对应一种编程语言，集中声明该语言的完整工具链配置，由 `lua/config/language.lua` 在对应 filetype 打开时按需加载。
 
-## 与根目录 langs/ 的分工
+## 设计意图
 
-根目录 `langs/` 声明每种语言的工具链规格（LSP 服务器名、formatter、treesitter parser、语言专属插件），由 `lua/config/language.lua` 在运行时按需加载和应用。
+将语言配置从 conform.nvim、nvim-lspconfig、nvim-treesitter 等各插件的配置文件中解耦出来，统一在单一文件中声明。修改一种语言的支持时只需编辑一个文件，添加新语言只需新建文件，无需同时改动多处插件配置。
 
-本目录则存放需要提前初始化或具有配置阶段副作用的语言设置，例如调试器适配器的注册、某些 LSP 的特殊初始化选项、或与其他插件的提前绑定。两个目录共同为每种语言提供完整支持，职责边界由执行时机决定。
+## 配置结构
+
+每个语言文件返回一张符合 `Config.LangConfig` 类型的表，包含以下可选字段：
+
+- `lsp` — LSP 服务器名称或含配置选项的表，由 `vim.lsp.config` 应用
+- `formatter` — conform.nvim 使用的 formatter 名称（单个或列表）
+- `treesitter` — treesitter parser 名称，默认按语言名自动推导
+- `pkgs` — Mason 安装包名（当包名与 lsp/formatter 名不一致时显式指定）
+- `plugins` — 语言专属的 lazy.nvim 插件 spec，随语言按需加载
+- `enabled` — 是否启用此语言配置，默认 true
+
+语言配置支持嵌套，可在一个文件中声明多个相关语言（如 javascript.lua 同时涵盖 TypeScript）。
+
+## 当前支持语言
+
+cpp、python、rust、lua、javascript（含 TypeScript）、nix、markdown、html、fish、haskell、qml、dotfile
