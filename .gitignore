@@ -1,6 +1,6 @@
 lazy-lock.json
 .idea
 .sisyphus/
-docs/plans
+# docs/plans (commented out - plans should be tracked in git for reference)
 .worktrees/
 result
