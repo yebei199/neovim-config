@@ -63,3 +63,12 @@ autocmd("VimResized", {
     vim.cmd("tabnext " .. vim.fn.tabpagenr())
   end,
 })
+
+-- Auto open explorer on startup
+autocmd("UIEnter", {
+  desc = "Auto open explorer on startup",
+  once = true,
+  callback = function()
+    if vim.fn.argc() == 0 then Snacks.explorer.open() end
+  end,
+})
