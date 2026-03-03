@@ -2,8 +2,8 @@
 
 ---@type Config.LangConfig
 return {
-  { "haskll", formatter = "fourmolu", lsp = "haskell-language-server" },
-  { "cabal", formatter = "cabal_fmt" },
+  { "haskell", formatter = "fourmolu", lsp = "haskell-language-server" },
+  { "cabal", formatter = "cabal_fmt", treesitter = false },
   plugins = {
     {
       "mrcjkb/haskell-snippets.nvim",
