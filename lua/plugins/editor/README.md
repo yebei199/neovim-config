@@ -13,3 +13,4 @@
 - `substitute.lua` — 增强替换操作，提供更直观的 substitute motion 语义
 - `coerce.lua` — 变量名格式快速转换（camelCase、snake_case、PascalCase 等）
 - `yanky.lua` — 寄存器历史管理，支持循环粘贴历史内容，解决默认粘贴只能访问最近一次复制的限制
+- `dadbod.lua` — vim-dadbod 数据库工具三件套集成，通过 blink.cmp 原生模块提供 SQL 字段补全，支持 ClickHouse 等数据库的编辑器内查询与执行

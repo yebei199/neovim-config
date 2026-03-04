@@ -60,12 +60,17 @@ return {
       default = { "lsp", "path", "snippets", "buffer" },
       per_filetype = {
         lua = { inherit_defaults = true, "lazydev" },
+        sql = { "snippets", "dadbod", "buffer" },
       },
       providers = {
         lazydev = {
           name = "LazyDev",
           module = "lazydev.integrations.blink",
           score_offset = 100,
+        },
+        dadbod = {
+          name = "Dadbod",
+          module = "vim_dadbod_completion.blink",
         },
       },
     },
