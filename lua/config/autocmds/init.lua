@@ -109,3 +109,10 @@ autocmd("VimResized", {
     vim.cmd("tabnext " .. vim.fn.tabpagenr())
   end,
 })
+-- Auto reload buffer when file changed on disk
+autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI" }, {
+  desc = "Check if buffer needs reload from disk",
+  callback = function()
+    if vim.fn.mode() ~= "c" then vim.cmd "checktime" end
+  end,
+})

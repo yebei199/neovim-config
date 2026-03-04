@@ -6,6 +6,7 @@ vim.g.autoformat = true
 vim.o.shada = "'100,<0"
 vim.o.swapfile = false
 vim.o.autowrite = true -- Enable auto write
+vim.o.autoread = true  -- 文件在磁盘被外部修改后自动重新加载（需配合 checktime 触发）
 -- only set clipboard if not in ssh, to make sure the OSC 52
 -- integration works automatically. Requires Neovim >= 0.10.0
 vim.o.clipboard = vim.env.SSH_TTY and "" or "unnamedplus" -- Sync with system clipboard
