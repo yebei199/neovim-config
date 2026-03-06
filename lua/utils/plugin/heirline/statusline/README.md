@@ -10,6 +10,8 @@
 
 **`file.lua`** 显示当前文件的路径、修改状态及文件类型图标，聚合了文件相关的多项状态信息。
 
+**`project.lua`** 显示当前项目的根目录名称，通过 LSP root_dir 或项目标志文件（如 `.git`）自动检测项目根，仅在成功检测到项目时显示，避免在临时场景下显示干扰信息。
+
 **`diagnostic.lua`** 汇总 LSP 诊断信息，按 error、warn、info、hint 分级展示各级别的数量，颜色对应 `diag_error`、`diag_warn` 等语义色。
 
 **`diff.lua`** 展示当前文件的 Git diff 统计（新增行数、删除行数、变更行数），颜色对应 `git_added`、`git_removed`、`git_changed`。
@@ -22,4 +24,4 @@
 
 ## 布局组装
 
-`init.lua` 按左到右顺序将组件排列为：`Mode → Diagnostic → File → Align → Noice → Ruler`，并在 `static` 中定义各模式对应的强调色映射，在 `init` 函数中每次渲染时读取当前模式并赋予对应颜色。
+`init.lua` 按左到右顺序将组件排列为：`Mode → Diagnostic → File → Project → Align → Noice → Ruler`，并在 `static` 中定义各模式对应的强调色映射，在 `init` 函数中每次渲染时读取当前模式并赋予对应颜色。其中 Project 组件位于 File 之后、Align 之前，在文件信息后补充显示项目名称。
