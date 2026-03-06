@@ -15,7 +15,6 @@
       gnumake # Makefile 构建
       ripgrep # 全局代码搜索（telescope/snacks grep 后端）
       lsof # 查看文件占用进程
-      neovide # Neovim GUI 前端
       zk # Zettelkasten 笔记管理 CLI
       choose # awk/cut 的现代替代，用于文本提取
       tokei # 代码行数统计

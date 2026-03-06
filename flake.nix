@@ -9,7 +9,13 @@
     };
   };
 
-  outputs = { self, nixpkgs, rust-overlay, ... }:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      rust-overlay,
+      ...
+    }:
     let
       pkgs = import nixpkgs {
         system = "x86_64-linux";
@@ -22,6 +28,7 @@
           imports = [
             ./nix/rust.nix
             ./nix/neovim.nix
+            ./nix/neovide.nix
             ./nix/github.nix
           ];
           _module.args = {
