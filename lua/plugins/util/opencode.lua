@@ -14,6 +14,9 @@ local terminal_opts = {
     enter = true,
     on_win = function(win)
       require("opencode.terminal").setup(win.win)
+      -- 覆盖插件默认的 <Esc>=interrupt，恢复终端 insert→normal 切换
+      -- interrupt 专用键为 <leader>oi（全局已设）
+      vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { buffer = win.buf, desc = "Terminal: insert→normal" })
     end,
   },
 }
