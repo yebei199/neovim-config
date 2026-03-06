@@ -1,37 +1,36 @@
 -- opencode.nvim 插件声明
--- sudo-tee/opencode.nvim：Neovim-native 的 opencode 前端，提供双面板 UI、diff 回滚、session 管理
--- 默认 agent 为 atlas；<leader>o 前缀的完整键位由插件内置 default_global_keymaps 统一管理
--- <C-c> 覆盖修复：绕过 is_running() 的 job_count 误判，直接调用 abort_session
+-- nickjvandyke/opencode.nvim：通过 snacks.terminal 嵌入 opencode TUI，浮动窗口模式
+-- server.toggle/start/stop 委托给 snacks.terminal，保持与项目浮动终端风格一致
+-- <leader>o 前缀承接完整键位体系；<C-\> 保留给 toggleterm
+local OPENCODE_CMD = "opencode --port"
+local FLOAT_WIDTH = 0.80
+
+---@type snacks.terminal.Opts
+local terminal_opts = {
+  win = {
+    position = "float",
+    border = "rounded",
+    width = FLOAT_WIDTH,
+    enter = true,
+    on_win = function(win)
+      require("opencode.terminal").setup(win.win)
+    end,
+  },
+}
+
 return {
-  "sudo-tee/opencode.nvim",
+  "nickjvandyke/opencode.nvim",
+  version = "*",
   dependencies = {
-    "nvim-lua/plenary.nvim",
-    {
-      "MeanderingProgrammer/render-markdown.nvim",
-      optional = true,
-    },
     {
       ---@module "snacks"
       "folke/snacks.nvim",
       optional = true,
       opts = {
+        input = {},
         picker = {
           actions = {
-            -- 在 picker 中按 <A-a> 可将条目发送给 opencode
-            opencode_send = function(picker)
-              local selected = picker:selected({ fallback = true })
-              if not selected or #selected == 0 then return end
-              local files = {}
-              for _, item in ipairs(selected) do
-                if item.file then table.insert(files, item.file) end
-              end
-              picker:close()
-              require("opencode.core").open({ new_session = false, focus = "input", start_insert = true })
-              local context = require("opencode.context")
-              for _, file in ipairs(files) do
-                context.add_file(file)
-              end
-            end,
+            opencode_send = function(...) return require("opencode").snacks_picker_send(...) end,
           },
           win = {
             input = {
@@ -45,48 +44,62 @@ return {
     },
   },
   config = function()
-    -- 直接调用 abort_session，绕过 is_running() 的 job_count 条件判断
-    -- 根因：job_count 仅追踪 HTTP 请求数，AI 推理期间通过 SSE 流式传输不增加 job_count，
-    -- 导致 is_running() 在 AI 实际运行时返回 false，cancel() 永远不调用 abort_session
-    local function force_abort()
-      local state = require('opencode.state')
-      if state.active_session and state.api_client then
-        pcall(function()
-          state.api_client:abort_session(state.active_session.id):wait()
-        end)
-      end
-      if require('opencode.ui.ui').is_opencode_focused() then
-        require('opencode.ui.input_window').set_content('')
-        require('opencode.ui.ui').focus_input()
-      end
-    end
+    ---@type opencode.Opts
+    vim.g.opencode_opts = {
+      server = {
+        start = function()
+          require("snacks.terminal").open(OPENCODE_CMD, terminal_opts)
+        end,
+        stop = function()
+          local t = require("snacks.terminal").get(OPENCODE_CMD, terminal_opts)
+          if t then t:close() end
+        end,
+        toggle = function()
+          require("snacks.terminal").toggle(OPENCODE_CMD, terminal_opts)
+        end,
+      },
+    }
 
-    require('opencode').setup({
-      -- default_global_keymaps = true 启用完整内置 <leader>o 键位体系
-      default_global_keymaps = true,
-      default_mode = 'atlas',
-      ui = {
-        position = 'right',
-        window_width = 0.40,
-        icons = { preset = 'nerdfonts' },
-      },
-      context = {
-        enabled = true,
-        current_file = { enabled = true, show_full_path = true },
-        selection = { enabled = true },
-        diagnostics = { warn = true, error = true },
-      },
-      keymap = {
-        -- 覆盖默认 <C-c>，在 insert + normal 模式都生效，直接 abort 而不依赖 is_running()
-        output_window = {
-          ['<C-c>'] = { force_abort, mode = { 'n', 'i' } },
-        },
-        input_window = {
-          ['<C-c>'] = { force_abort, mode = { 'n', 'i' } },
-        },
-      },
-    })
-    -- opencode 编辑文件后自动重载对应 buffer
     vim.o.autoread = true
+
+    -- toggle：浮动窗口开关（<leader>ot，<C-\> 留给 toggleterm）
+    vim.keymap.set({ "n", "t" }, "<leader>ot", function() require("opencode").toggle() end,
+      { desc = "Toggle opencode" })
+
+    -- ask：发送当前上下文（@this 占位符）
+    vim.keymap.set({ "n", "x" }, "<leader>oa",
+      function() require("opencode").ask("@this: ", { submit = true }) end,
+      { desc = "Ask opencode" })
+
+    -- select：从 prompts/commands/server 列表选择
+    vim.keymap.set({ "n", "x" }, "<leader>os", function() require("opencode").select() end,
+      { desc = "Select opencode action" })
+
+    -- operator：将范围/行发送给 opencode
+    vim.keymap.set({ "n", "x" }, "go",
+      function() return require("opencode").operator("@this ") end,
+      { desc = "Add range to opencode", expr = true })
+    vim.keymap.set("n", "goo",
+      function() return require("opencode").operator("@this ") .. "_" end,
+      { desc = "Add line to opencode", expr = true })
+
+    -- session 滚动
+    vim.keymap.set("n", "<S-C-u>",
+      function() require("opencode").command("session.half.page.up") end,
+      { desc = "Scroll opencode up" })
+    vim.keymap.set("n", "<S-C-d>",
+      function() require("opencode").command("session.half.page.down") end,
+      { desc = "Scroll opencode down" })
+
+    -- session 管理
+    vim.keymap.set("n", "<leader>on",
+      function() require("opencode").command("session.new") end,
+      { desc = "New opencode session" })
+    vim.keymap.set("n", "<leader>ol",
+      function() require("opencode").command("session.list") end,
+      { desc = "List opencode sessions" })
+    vim.keymap.set("n", "<leader>oi",
+      function() require("opencode").command("session.interrupt") end,
+      { desc = "Interrupt opencode" })
   end,
 }
