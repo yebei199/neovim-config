@@ -41,6 +41,11 @@ map("t", "<esc><esc>", "<cmd>stopinsert<CR>", { desc = "which_key_ignore" })
 map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
 map({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
 
+-- Motion: line start, line end, file end
+map("n", "gh", "^", { desc = "Go to Line Start" })
+map("n", "gl", "$", { desc = "Go to Line End" })
+map("n", "ge", "G", { desc = "Go to File End" })
+
 -- Move Lines
 map("n", "<A-j>", "<cmd>execute 'move .+' . v:count1<cr>==", { desc = "Move Down" })
 map("n", "<A-k>", "<cmd>execute 'move .-' . (v:count1 + 1)<cr>==", { desc = "Move Up" })
