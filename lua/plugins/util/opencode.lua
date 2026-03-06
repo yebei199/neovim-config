@@ -1,36 +1,25 @@
 -- opencode.nvim 插件声明
 -- nickjvandyke/opencode.nvim：通过 snacks.terminal 嵌入 opencode TUI，浮动窗口模式
--- session 与项目目录绑定，重启自动恢复上次 session；<C-;> 作为 toggle 快捷键
+-- session 通过 opencode CLI 查询自动恢复：启动时查询匹配当前 cwd 的最近 session；<C-;> 作为 toggle 快捷键
 -- server.toggle/start/stop 委托给 snacks.terminal；<C-\> 保留给 toggleterm
 local FLOAT_WIDTH = 0.80
-local SESSION_MAP_PATH = vim.fn.stdpath("data") .. "/opencode-sessions.json"
 
--- 读取 cwd→session_id 映射文件
-local function load_session_map()
-  local ok, data = pcall(vim.fn.readfile, SESSION_MAP_PATH)
-  if not ok or #data == 0 then return {} end
-  local decoded = vim.fn.json_decode(table.concat(data, ""))
-  return type(decoded) == "table" and decoded or {}
-end
-
--- 持久化 cwd→session_id 映射
-local function save_session_map(map)
-  vim.fn.writefile({ vim.fn.json_encode(map) }, SESSION_MAP_PATH)
-end
-
--- 记录当前 cwd 的 session_id
-local function record_session(session_id)
-  local map = load_session_map()
-  map[vim.uv.cwd()] = session_id
-  save_session_map(map)
-end
-
--- 构造启动命令：有历史 session 时附加 -s <id>，否则裸启动
+-- 构造启动命令：查询 opencode CLI 查找匹配当前 cwd 的最近 session，自动恢复
 local function build_cmd()
-  local map = load_session_map()
-  local session_id = map[vim.uv.cwd()]
-  if session_id and session_id ~= "" then
-    return "opencode --port -s " .. session_id
+  local cwd = vim.uv.cwd()
+  local json_out = vim.fn.system("opencode session list --format json 2>/dev/null")
+  if vim.v.shell_error ~= 0 or json_out == "" then
+    return "opencode --port"
+  end
+  local ok, sessions = pcall(vim.fn.json_decode, json_out)
+  if not ok or type(sessions) ~= "table" then
+    return "opencode --port"
+  end
+  -- 查找最近的目录精确匹配 session，CLI 已按 updated DESC 排序
+  for _, s in ipairs(sessions) do
+    if s.directory == cwd and s.id and s.id ~= "" then
+      return "opencode --port -s " .. s.id
+    end
   end
   return "opencode --port"
 end
@@ -102,18 +91,6 @@ return {
     }
 
     vim.o.autoread = true
-
-    -- 监听 session.idle 事件，记录当前 cwd 对应的 session_id
-    -- session.idle 在 session 切换/新建/恢复后触发，properties.sessionID 为当前 session
-    vim.api.nvim_create_autocmd("User", {
-      pattern = "OpencodeEvent:session.idle",
-      callback = function(ev)
-        local sid = ev.data and ev.data.event and ev.data.event.properties and ev.data.event.properties.sessionID
-        if sid and sid ~= "" then
-          record_session(sid)
-        end
-      end,
-    })
 
     -- toggle：<C-;> 开关浮动窗口（<C-\> 保留给 toggleterm）
     vim.keymap.set({ "n", "t" }, "<C-;>", function() require("opencode").toggle() end,
