@@ -92,8 +92,8 @@ return {
 
     vim.o.autoread = true
 
-    -- toggle：<C-;> 开关浮动窗口（<C-\> 保留给 toggleterm）
-    vim.keymap.set({ "n", "t" }, "<C-;>", function() require("opencode").toggle() end,
+    -- toggle：<C-'> 开关浮动窗口（<C-\> 保留给 toggleterm）
+    vim.keymap.set({ "n", "t" }, "<C-'>", function() require("opencode").toggle() end,
       { desc = "Toggle opencode" })
 
     -- ask：发送当前上下文（@this 占位符）
