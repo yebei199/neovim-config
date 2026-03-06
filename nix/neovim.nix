@@ -74,11 +74,14 @@
           "$lazydir"
       fi
     '';
-    # 将项目配置文件递徒链接到 ~/.config/nvim
+    # 将项目配置文件递归链接到 ~/.config/nvim
     xdg.configFile."nvim" = {
       source = "${nvim_config_src}";
       recursive = true;
     };
+
+    # fd/rg 全局屏蔽名单，影响所有使用这两个工具的程序（含 Neovim picker）
+    home.file.".ignore".source = "${nvim_config_src}/ignore";
 
     # Neovim 编辑器基础配置：启用编辑器，设置为默认编辑器
     programs.neovim = {

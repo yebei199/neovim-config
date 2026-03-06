@@ -1,0 +1,9 @@
+# 全局搜索屏蔽名单（fd/rg 自动读取 ~/.ignore，.gitignore 语法）
+# 影响范围：所有使用 fd/rg 的工具，包括 Neovim picker
+
+.git
+.venv
+venv
+node_modules
+__pycache__
+.direnv
