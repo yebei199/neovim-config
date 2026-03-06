@@ -1,27 +1,35 @@
 -- opencode.nvim 插件声明
 -- nickjvandyke/opencode.nvim：通过 snacks.terminal 嵌入 opencode TUI，浮动窗口模式
--- session 通过 opencode CLI 查询自动恢复：启动时查询匹配当前 cwd 的最近 session；<C-;> 作为 toggle 快捷键
+-- session 通过 opencode CLI 查询自动恢复：启动时查询匹配当前 cwd 的最近 session；<C-'> 作为 toggle 快捷键
 -- server.toggle/start/stop 委托给 snacks.terminal；<C-\> 保留给 toggleterm
 local FLOAT_WIDTH = 0.80
 
--- 构造启动命令：查询 opencode CLI 查找匹配当前 cwd 的最近 session，自动恢复
+-- 惰性缓存：仅首次调用时查询 CLI（opencode session list 耗时约 4s），后续直接返回
+local _cached_cmd = nil
+
+-- 查询当前 cwd 最近的 opencode session，构造启动命令；结果缓存，只查一次
 local function build_cmd()
+  if _cached_cmd then return _cached_cmd end
   local cwd = vim.uv.cwd()
   local json_out = vim.fn.system("opencode session list --format json 2>/dev/null")
   if vim.v.shell_error ~= 0 or json_out == "" then
-    return "opencode --port"
+    _cached_cmd = "opencode --port"
+    return _cached_cmd
   end
   local ok, sessions = pcall(vim.fn.json_decode, json_out)
   if not ok or type(sessions) ~= "table" then
-    return "opencode --port"
+    _cached_cmd = "opencode --port"
+    return _cached_cmd
   end
-  -- 查找最近的目录精确匹配 session，CLI 已按 updated DESC 排序
+  -- CLI 已按 updated DESC 排序，第一个精确匹配即为最近 session
   for _, s in ipairs(sessions) do
     if s.directory == cwd and s.id and s.id ~= "" then
-      return "opencode --port -s " .. s.id
+      _cached_cmd = "opencode --port -s " .. s.id
+      return _cached_cmd
     end
   end
-  return "opencode --port"
+  _cached_cmd = "opencode --port"
+  return _cached_cmd
 end
 
 ---@type snacks.terminal.Opts
