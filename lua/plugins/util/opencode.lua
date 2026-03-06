@@ -21,9 +21,13 @@ local function build_cmd()
     _cached_cmd = "opencode --port"
     return _cached_cmd
   end
-  -- CLI 已按 updated DESC 排序，第一个精确匹配即为最近 session
+  -- CLI 已按 updated DESC 排序，第一个前缀匹配即为最近 session
+  -- 前缀匹配而非精确匹配：opencode 启动时的 cwd 可能是项目子目录
+  local cwd_prefix = cwd .. "/"
   for _, s in ipairs(sessions) do
-    if s.directory == cwd and s.id and s.id ~= "" then
+    local dir = s.directory or ""
+    local match = dir == cwd or dir:sub(1, #cwd_prefix) == cwd_prefix
+    if match and s.id and s.id ~= "" then
       _cached_cmd = "opencode --port -s " .. s.id
       return _cached_cmd
     end
