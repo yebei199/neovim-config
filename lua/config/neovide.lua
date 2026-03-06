@@ -1,6 +1,8 @@
 -- neovide GUI 前端配置：字体、渲染、光标动画、输入法处理等专属于图形界面的设置
 -- 仅在检测到 neovide 环境时执行，其余终端 UI 配置保持原样
-if not vim.g.neovide then return end
+if not vim.g.neovide then
+    return
+end
 
 -- =============================================================================
 -- 字体配置 — 使用 Nerd Font 支持图标，多字体后备机制
@@ -26,7 +28,7 @@ vim.g.neovide_opacity = 0.95
 -- vim.g.neovide_normal_opacity = 0.95
 
 -- 文本渲染质量 — 调整伽玛值和对比度以适应不同的显示器
-vim.g.neovide_text_gamma = 0.0    -- 标准 sRGB gamma (2.2)
+vim.g.neovide_text_gamma = 0.0 -- 标准 sRGB gamma (2.2)
 vim.g.neovide_text_contrast = 0.5 -- 默认对比度，平衡清晰度与准确色彩
 
 -- 下划线笔触缩放 — 适配高 DPI 或特殊的下划线样式（如 undercurl）
@@ -138,17 +140,17 @@ vim.g.neovide_touch_drag_timeout = 0.17
 -- =============================================================================
 -- 在插入模式、命令行搜索时自动启用 IME，其他模式禁用，便于 Vim 快捷键导航
 vim.api.nvim_create_autocmd({
-  "InsertEnter",
-  "InsertLeave",
-  "TermEnter",
-  "TermLeave",
-  "CmdlineEnter",
-  "CmdlineLeave",
+    "InsertEnter",
+    "InsertLeave",
+    "TermEnter",
+    "TermLeave",
+    "CmdlineEnter",
+    "CmdlineLeave",
 }, {
-  group = vim.api.nvim_create_augroup("neovide_ime_input", { clear = true }),
-  pattern = "*",
-  callback = function(args)
-    -- 如果事件名以 "Enter" 结尾，启用 IME；否则禁用
-    vim.g.neovide_input_ime = not not args.event:match "Enter$"
-  end,
+    group = vim.api.nvim_create_augroup("neovide_ime_input", { clear = true }),
+    pattern = "*",
+    callback = function(args)
+        -- 如果事件名以 "Enter" 结尾，启用 IME；否则禁用
+        vim.g.neovide_input_ime = not not args.event:match("Enter$")
+    end,
 })
