@@ -308,7 +308,7 @@
 | `<leader>oI`    | n   | 打开输入框（新 session）     |
 | `<leader>og`    | n   | 切换 opencode 窗口       |
 | `<leader>oq`    | n   | 关闭 opencode          |
-| `<leader>ot`    | n   | 切换焦点（opencode/编辑器）   |
+| `<C-;>`         | n/t | 切换 opencode 浮动窗口      |
 | `<leader>oT`    | n   | Session 时间线          |
 | `<leader>os`    | n   | 选择 session           |
 | `<leader>oR`    | n   | 重命名 session          |
