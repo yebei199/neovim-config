@@ -10,9 +10,9 @@ return {
     },
     {
       "MeanderingProgrammer/render-markdown.nvim",
-      ft = { "markdown", "opencode_output" },
+      ft = { "markdown" },
       opts = {
-        file_types = { "markdown", "opencode_output" },
+        file_types = { "markdown" },
         render_modes = { "n", "c", "t", "V" },
         code = {
           sign = false,
