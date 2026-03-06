@@ -7,16 +7,10 @@ return {
   opts = {
     picker = {
       enabled = true,
-      -- 全局显示隐藏文件，但屏蔽常见噪音目录
+      -- 显示隐藏文件；屏蔽名单由 ~/.ignore 统一管理（fd/rg 自动读取）
       sources = {
-        files = {
-          hidden = true,
-          exclude = { ".git", ".venv", "venv", "node_modules", "__pycache__", ".direnv" },
-        },
-        grep = {
-          hidden = true,
-          exclude = { ".git", ".venv", "venv", "node_modules", "__pycache__", ".direnv" },
-        },
+        files = { hidden = true },
+        grep  = { hidden = true },
       },
       matcher = {
         frecency = true,
