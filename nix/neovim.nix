@@ -21,7 +21,7 @@
 
       # Nix LSP & formatter
       nixd # Nix LSP（nixd）
-      nixfmt-rfc-style # Nix formatter（nixfmt）
+      nixfmt # Nix formatter（nixfmt）
 
       # Lua LSP & formatter
       lua-language-server # Lua LSP（lua_ls）
