@@ -84,9 +84,12 @@
     home.file.".ignore".source = "${nvim_config_src}/ignore";
 
     # Neovim 编辑器基础配置：启用编辑器，设置为默认编辑器
+    # 显式禁用 Ruby/Python3 provider，现代 Lua 插件不依赖这些 provider
     programs.neovim = {
       enable = true;
       defaultEditor = true;
+      withRuby = false;
+      withPython3 = false;
     };
   };
 }
