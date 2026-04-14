@@ -1,3 +1,4 @@
+-- 语法树插件规范：兼容新版 nvim-treesitter 的启动入口，保留高亮、缩进、增量选择与文本对象配置。
 return {
   {
     "nvim-treesitter/nvim-treesitter",
@@ -6,7 +7,6 @@ return {
     event = { "LazyFile", "VeryLazy" },
     init = function(plugin)
       require("lazy.core.loader").add_to_rtp(plugin)
-      require "nvim-treesitter.query_predicates"
     end,
     cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
     keys = {
@@ -19,9 +19,8 @@ return {
     "nvim-treesitter/nvim-treesitter-textobjects",
     event = { "LazyFile", "VeryLazy" },
     config = function()
-      ---@type TSConfig
       ---@diagnostic disable-next-line: missing-fields
-      require("nvim-treesitter.configs").setup {
+      require("nvim-treesitter.config").setup {
         highlight = { enable = true },
         indent = { enable = true },
         incremental_selection = {
