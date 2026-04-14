@@ -1,8 +1,9 @@
 -- lua/plugins/ui/snacks.lua
--- Snacks.nvim dashboard 配置：首屏以项目列表为主体，右侧展示 GitHub 通知。
+-- Snacks.nvim dashboard 配置：首屏以项目列表为主体，右侧展示启动信息。
 -- 左侧：自定义 fn section 展示最近项目（含 tokei 语言占比）+ 快捷键（p 键打开全量可搜索的项目 picker）；
--- 右侧（width>135）：gh-notify 终端 + 启动耗时。
+-- 右侧（width>135）：启动耗时。
 -- 项目选择时通过 persisted.nvim 自动恢复该 cwd 的 session。
+---@diagnostic disable: undefined-doc-name, undefined-global
 
 local PANE2_MIN_COLS = 135  -- 右侧面板出现的最小终端宽度
 local PROJECTS_LIMIT = 12   -- 展示的最近项目数
@@ -75,15 +76,6 @@ return {
         make_project_section,
         -- 左侧：快捷操作
         { section = "keys", gap = 1, indent = 2, padding = 1 },
-        -- 右侧：GitHub 通知
-        side {
-          section = "terminal",
-          cmd = [[gh notify -san 5 | choose .. -f '#\d+'\033'\[0m\s+' -o '\n   ']],
-          height = 10,
-          ttl = 5 * 100,
-          icon = "",
-          title = "Notifications",
-        },
         -- 右侧：启动耗时
         side { section = "startup" },
       },

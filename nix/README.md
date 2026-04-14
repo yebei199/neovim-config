@@ -12,7 +12,7 @@
 
 **`rust.nix`** 声明 Rust 开发工具链，包括编译器、cargo 相关工具以及 Rust 开发所需的系统级依赖，与 Neovim 的 Rust LSP 配置（`langs/rust.lua`）协同工作，保证工具链版本与编辑器集成一致。
 
-**`github.nix`** 声明 GitHub 交互和版本控制相关工具，包括 gh（官方命令行工具）、gh-notify（通知扩展）、lazygit（交互式 Git 客户端）、meld（图形化 diff 对比）和 delta（增强的行级 diff 显示），支撑日常 Git 工作流和 GitHub 操作。
+**`github.nix`** 声明 GitHub 交互和版本控制相关工具，包括 gh（官方命令行工具）、lazygit（交互式 Git 客户端）、meld（图形化 diff 对比）和 delta（增强的行级 diff 显示），支撑日常 Git 工作流和 GitHub 操作；这里不再包含 GitHub 通知扩展的自动安装逻辑。
 
 ## 与其他目录的关系
 
