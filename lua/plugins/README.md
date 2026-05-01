@@ -8,7 +8,7 @@
 
 **editor/** — 扩展 Neovim 内建编辑能力的插件：快速跳转（flash）、配对符号管理（surround）、增强文本对象（mini-ai）、自动配对（pair）、行内 Git 差异（gitsign）、项目级搜索替换（grug-far）、替换增强（substitute）、格式转换（coerce）、复制历史（yanky）。
 
-**lsp/** — LSP 生态相关插件：工具安装管理（mason）、语法树解析（treesitter）、自动补全（complete）、诊断显示（diagnostic）、代码格式化（format）、TODO 注释（todo）、诊断汇总窗口（trouble）。具体语言的服务器配置不在此处，而在 `lua/config/langs/`。
+**lsp/** — LSP 生态相关插件：工具安装管理（mason）、语法树解析（treesitter）、自动补全（complete）、诊断显示（diagnostic）、代码格式化（format）、TODO 注释（todo）、诊断汇总窗口（trouble）。其中 treesitter 由主插件统一完成 `setup`，文本对象扩展通过依赖挂载，减少插件入口升级或懒加载顺序调整带来的脆弱性。具体语言的服务器配置不在此处，而在 `lua/config/langs/`。
 
 **ui/** — 纯视觉层插件：配色方案（colorscheme）、状态栏与标签栏（heirline）、颜色值内联高亮（highlight-color）、通知系统（snacks）、标签栏（tabline）。
 
