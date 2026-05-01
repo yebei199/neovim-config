@@ -5,3 +5,7 @@ docs/plans
 # docs/plans (commented out - plans should be tracked in git for reference)
 .worktrees/
 result
+
+# Neovim runtime artifacts
+*.log
+nvim.log
